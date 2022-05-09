@@ -60,7 +60,7 @@ public class Monitor {
 
     private double getGpuTemperature() {
         return getGpu().sensors.temperatures.stream()
-                .filter(temperature ->  temperature.name.startsWith(TEMP_GPU_CORE))
+                .filter(temperature -> temperature.name.startsWith(TEMP_GPU_CORE))
                 .mapToDouble(temperature -> temperature.value)
                 .average()
                 .orElse(Double.NaN);

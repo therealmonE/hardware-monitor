@@ -1,7 +1,7 @@
 package io.github.therealmone.hardware.monitor;
 
-import io.github.therealmone.hardware.monitor.sender.UsageSender;
 import io.github.therealmone.hardware.monitor.dto.Usages;
+import io.github.therealmone.hardware.monitor.sender.UsageSender;
 import io.github.therealmone.hardware.monitor.sender.impl.BluetoothUsageSender;
 
 import java.util.List;
@@ -14,7 +14,7 @@ public class Main {
     private static final Monitor monitor = new Monitor();
 
     private static final List<UsageSender> usageSenders = List.of(
-            new BluetoothUsageSender()
+            new BluetoothUsageSender("JDY-31-SPP")
     );
 
     public static void main(String[] args) {
