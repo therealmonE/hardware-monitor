@@ -9,20 +9,40 @@ import io.github.therealmone.hardware.monitor.serialization.impl.BluetoothUsages
 
 public class BluetoothUsageSender implements UsageSender {
 
-    private final DeviceWrapper monitor;
     private final UsagesSerializer usagesSerializer = new BluetoothUsagesSerializer();
+    private final String deviceName;
+    private DeviceWrapper device;
+    private boolean connected;
 
     public BluetoothUsageSender(String deviceName) {
-        DeviceScanner deviceScanner = new DeviceScanner();
-        deviceScanner.scan();
-
-        this.monitor = deviceScanner.getDevice(deviceName).orElseThrow();
-        monitor.connect();
+        this.deviceName = deviceName;
     }
 
     @Override
     public void send(Usages usages) throws Exception {
-        monitor.send(usagesSerializer.serialize(usages));
+        if (!connected) {
+            connect();
+        }
+
+        try {
+            device.send(usagesSerializer.serialize(usages));
+        } catch (Exception e) {
+            System.out.println("Error while sending data: ");
+            e.printStackTrace();
+
+            connected = false;
+            device = null;
+        }
+    }
+
+    private void connect() {
+        DeviceScanner deviceScanner = new DeviceScanner();
+        deviceScanner.scan();
+
+        this.device = deviceScanner.getDevice(deviceName).orElseThrow();
+        device.connect();
+
+        connected = true;
     }
 
 }
